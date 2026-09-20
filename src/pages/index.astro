@@ -1,50 +1,7 @@
 ---
-const title = "blog.ohrt.dev";
+import BlogLayout from "../layouts/BlogLayout.astro";
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title}</title>
-    <meta name="description" content="Oliver Ohrt's blog." />
-    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
-  </head>
-  <body>
-    <main>
-      <h1>blog.ohrt.dev</h1>
-      <p>Under construction</p>
-      <p><a href="https://ohrt.dev">&larr; ohrt.dev</a></p>
-    </main>
-  </body>
-</html>
-
-<style>
-  body {
-    margin: 0;
-    padding: 12vh 24px;
-    background: #101418;
-    color: #d7dee6;
-    font: 16px/1.6 ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  }
-
-  main {
-    max-width: 34rem;
-    margin: 0 auto;
-  }
-
-  h1 {
-    margin: 0 0 1rem;
-    font-size: 1.4rem;
-    font-weight: 600;
-    letter-spacing: 0.02em;
-  }
-
-  p {
-    margin: 0 0 0.75rem;
-  }
-
-  a {
-    color: #7fb2e5;
-  }
-</style>
+<BlogLayout title="blog.ohrt.dev">
+  <p>Under construction</p>
+</BlogLayout>

@@ -1,0 +1,107 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "Oliver Ohrt's blog." } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#202E46" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+  </head>
+  <body>
+    <div class="shell">
+      <header class="bar box">
+        <a href="/">blog.ohrt.dev</a>
+        <a href="https://ohrt.dev">&larr; ohrt.dev</a>
+      </header>
+      <main class="box">
+        <slot />
+      </main>
+    </div>
+  </body>
+</html>
+
+<style is:global>
+  body {
+    margin: 0;
+    padding: 28px 18px 18vh;
+    background: #202E46;
+    font-family: "MS UI Gothic", "MS PGothic", sans-serif;
+  }
+
+  .shell {
+    max-width: 44rem;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .box {
+    box-shadow:
+      0 0 0 1.5px rgb(0, 15, 149),
+      0 0 0 3px rgb(96, 96, 96);
+  }
+
+  .bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 30px;
+    padding: 0 12px;
+    background: linear-gradient(
+      to bottom,
+      #B2D1FF 0%,
+      #80A7FF 50%,
+      #3A7AB6 51%,
+      #A8BEFF 100%
+    );
+    font-size: 13px;
+  }
+
+  .bar a {
+    color: #0a1f4d;
+    text-decoration: none;
+  }
+
+  main {
+    background: #3F6589;
+    color: #fff;
+    padding: 20px;
+    font-size: 17px;
+    line-height: 1.55;
+  }
+
+  a { color: #B2D1FF; }
+
+  h1 {
+    margin: 0 0 4px;
+    font-size: 24px;
+    letter-spacing: 1px;
+  }
+
+  time {
+    display: block;
+    margin-bottom: 14px;
+    font-size: 13px;
+  }
+
+  p { margin: 0; }
+  p + p { margin-top: 14px; }
+
+  pre {
+    overflow-x: auto;
+    padding: 12px;
+  }
+
+  img { max-width: 100%; }
+</style>
