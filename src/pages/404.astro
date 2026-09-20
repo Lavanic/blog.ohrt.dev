@@ -1,0 +1,33 @@
+---
+import BlogLayout from "../layouts/BlogLayout.astro";
+---
+
+<BlogLayout title="404 - blog.ohrt.dev" description="Page not found.">
+  <div class="notfound">
+    <img src="/images/404.webp" alt="" />
+    <div>
+      <h1>error 404</h1>
+      <p>the page you're looking for doesn't exist lol.</p>
+      <a href="/">&larr; take me home</a>
+    </div>
+  </div>
+</BlogLayout>
+
+<style>
+  .notfound {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+
+  .notfound img {
+    width: 45%;
+    align-self: stretch;
+    object-fit: cover;
+  }
+
+  @media (max-width: 560px) {
+    .notfound { flex-direction: column; }
+    .notfound img { width: 100%; }
+  }
+</style>
