@@ -26,3 +26,13 @@ export function postUrl(post: CollectionEntry<"posts">) {
   const { year, month, day, slug } = postParams(post);
   return `/${year}/${month}/${day}/${slug}/`;
 }
+
+// "16th September 2026"
+export function formatDate(date: Date) {
+  const day = date.getUTCDate();
+  const suffix =
+    day % 100 >= 11 && day % 100 <= 13 ? "th"
+    : ["th", "st", "nd", "rd"][day % 10] ?? "th";
+  const month = date.toLocaleDateString("en-US", { month: "long", timeZone: "UTC" });
+  return `${day}${suffix} ${month} ${date.getUTCFullYear()}`;
+}

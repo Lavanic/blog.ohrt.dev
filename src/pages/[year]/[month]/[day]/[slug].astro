@@ -2,7 +2,7 @@
 import { render } from "astro:content";
 import type { GetStaticPaths } from "astro";
 import BlogLayout from "../../../../layouts/BlogLayout.astro";
-import { getPosts, postParams, postUrl } from "../../../../lib/posts";
+import { formatDate, getPosts, postParams, postUrl } from "../../../../lib/posts";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const posts = await getPosts();
@@ -24,14 +24,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 const { post, next, previous, tags } = Astro.props;
 const { Content } = await render(post);
-// "16th September 2026"
 const { date } = post.data;
-const day = date.getUTCDate();
-const suffix =
-  day % 100 >= 11 && day % 100 <= 13 ? "th"
-  : ["th", "st", "nd", "rd"][day % 10] ?? "th";
-const month = date.toLocaleDateString("en-US", { month: "long", timeZone: "UTC" });
-const shown = `${day}${suffix} ${month} ${date.getUTCFullYear()}`;
+const shown = formatDate(date);
 ---
 
 <BlogLayout title={post.data.title} description={post.data.description}>
