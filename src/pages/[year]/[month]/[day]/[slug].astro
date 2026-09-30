@@ -2,14 +2,27 @@
 import { render } from "astro:content";
 import type { GetStaticPaths } from "astro";
 import BlogLayout from "../../../../layouts/BlogLayout.astro";
-import { getPosts, postParams } from "../../../../lib/posts";
+import { getPosts, postParams, postUrl } from "../../../../lib/posts";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const posts = await getPosts();
-  return posts.map((post) => ({ params: postParams(post), props: { post } }));
+  const tagCounts = new Map<string, number>();
+  for (const { data } of posts) {
+    for (const tag of data.tags) tagCounts.set(tag, (tagCounts.get(tag) ?? 0) + 1);
+  }
+  // posts are newest first, so "next" is the newer neighbour
+  return posts.map((post, i) => ({
+    params: postParams(post),
+    props: {
+      post,
+      next: posts[i - 1],
+      previous: posts[i + 1],
+      tags: post.data.tags.map((tag) => ({ tag, count: tagCounts.get(tag) ?? 0 })),
+    },
+  }));
 };
 
-const { post } = Astro.props;
+const { post, next, previous, tags } = Astro.props;
 const { Content } = await render(post);
 // "16th September 2026"
 const { date } = post.data;
@@ -28,8 +41,52 @@ const shown = `${day}${suffix} ${month} ${date.getUTCFullYear()}`;
     <footer>
       Posted <time datetime={date.toISOString()}>{shown}</time>
     </footer>
+    <aside class="meta">
+      <p>
+        This is <strong>{post.data.title}</strong> by Oliver Ohrt, posted on {shown}.
+      </p>
+      {tags.length > 0 && (
+        <p class="tags">
+          {tags.map(({ tag, count }) => (
+            <span class="tag">{tag} <span>{count}</span></span>
+          ))}
+        </p>
+      )}
+      <p>
+        <strong>Next:</strong>{" "}
+        {next ? <a href={postUrl(next)}>{next.data.title}</a> : "N/A"}
+      </p>
+      <p>
+        <strong>Previous:</strong>{" "}
+        {previous ? <a href={postUrl(previous)}>{previous.data.title}</a> : "N/A"}
+      </p>
+    </aside>
   </article>
 </BlogLayout>
+
+<script>
+  // The meta box sits at the top of the right margin, so any sidenote
+  // whose reference is level with it moves to the left margin instead.
+  const article = document.querySelector("article");
+  const meta = article?.querySelector<HTMLElement>(".meta");
+
+  function placeSidenotes() {
+    if (!article || !meta) return;
+    const notes = article.querySelectorAll<HTMLElement>(".sidenote");
+    notes.forEach((note) => note.classList.remove("sidenote-left"));
+    if (getComputedStyle(meta).position !== "absolute") return;
+    const clearOf = meta.getBoundingClientRect().bottom + 16;
+    for (const note of notes) {
+      const ref = note.previousElementSibling;
+      if (ref && ref.getBoundingClientRect().top < clearOf) {
+        note.classList.add("sidenote-left");
+      }
+    }
+  }
+
+  // re-run when images load or the window resizes
+  if (article) new ResizeObserver(placeSidenotes).observe(article);
+</script>
 
 <style>
   h1 {
@@ -155,6 +212,27 @@ const shown = `${day}${suffix} ${month} ${date.getUTCFullYear()}`;
     border-bottom: 1px solid #5580A8;
   }
 
+  /* narrow: the meta box follows the post */
+  .meta {
+    margin-top: 1.5em;
+    font-size: 0.9em;
+  }
+
+  .tag {
+    display: inline-block;
+    margin: 0 0.3em 0.5em 0;
+    padding: 4px 10px;
+    border: 1px solid #3F6589;
+    border-radius: 5px;
+    background: #263340;
+  }
+
+  .tag span {
+    font-size: 0.6em;
+    vertical-align: middle;
+    color: #A0B4C8;
+  }
+
   /* narrow: standard footnotes at the bottom, margin copies hidden */
   article :global(.sidenote) {
     display: none;
@@ -181,6 +259,19 @@ const shown = `${day}${suffix} ${month} ${date.getUTCFullYear()}`;
   }
 
   @media (min-width: 81rem) {
+    article {
+      position: relative;
+    }
+
+    /* pinned to the top of the right margin, same column as sidenotes */
+    .meta {
+      position: absolute;
+      top: 0;
+      left: calc(100% + 35px);
+      width: 15rem;
+      margin: 0;
+    }
+
     article :global(.footnotes) {
       display: none;
     }
@@ -194,6 +285,12 @@ const shown = `${day}${suffix} ${month} ${date.getUTCFullYear()}`;
       margin: 4px calc(-15rem - 35px) 14px 0;
       font-size: 14px;
       line-height: 1.45;
+    }
+
+    article :global(.sidenote-left) {
+      float: left;
+      clear: left;
+      margin: 4px 0 14px calc(-15rem - 35px);
     }
 
     article :global(.sidenote-num) {
