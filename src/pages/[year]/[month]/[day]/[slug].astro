@@ -11,19 +11,23 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
-const shown = post.data.date.toLocaleDateString("en-US", {
-  year: "numeric",
-  month: "long",
-  day: "numeric",
-  timeZone: "UTC",
-});
+// "16th September 2026"
+const { date } = post.data;
+const day = date.getUTCDate();
+const suffix =
+  day % 100 >= 11 && day % 100 <= 13 ? "th"
+  : ["th", "st", "nd", "rd"][day % 10] ?? "th";
+const month = date.toLocaleDateString("en-US", { month: "long", timeZone: "UTC" });
+const shown = `${day}${suffix} ${month} ${date.getUTCFullYear()}`;
 ---
 
 <BlogLayout title={post.data.title} description={post.data.description}>
   <article>
-    <time datetime={post.data.date.toISOString()}>{shown}</time>
     <h1>{post.data.title}</h1>
     <Content />
+    <footer>
+      Posted <time datetime={date.toISOString()}>{shown}</time>
+    </footer>
   </article>
 </BlogLayout>
 
@@ -36,8 +40,119 @@ const shown = post.data.date.toLocaleDateString("en-US", {
     margin: 0 0 0.8em 0;
   }
 
-  time {
-    margin-bottom: 4px;
+  footer {
+    margin-top: 1em;
+    padding-top: 0.5em;
+    border-top: 1px solid #5580A8;
+    font-size: 0.9em;
+  }
+
+  footer time {
+    display: inline;
+    margin: 0;
+    font-size: inherit;
+  }
+
+  article :global(p) {
+    margin: 0 0 0.8em 0;
+  }
+
+  article :global(h2),
+  article :global(h3),
+  article :global(h4) {
+    margin: 1.2em 0 0.5em 0;
+    font-family: georgia, serif;
+    font-size: 1.2em;
+    line-height: 1.4;
+  }
+
+  article :global(h4) {
+    font-size: 1.1em;
+  }
+
+  article :global(a) {
+    text-decoration: none;
+    border-bottom: 1px solid;
+  }
+
+  article :global(a:hover),
+  article :global(a:focus) {
+    border-bottom-style: dotted;
+  }
+
+  article :global(a:has(> img)),
+  article :global([data-footnote-ref]) {
+    border-bottom: none;
+  }
+
+  article :global(ul),
+  article :global(ol) {
+    margin: 0 0 0.8em 0;
+    padding: 0;
+  }
+
+  article :global(li) {
+    margin-left: 1em;
+    list-style-type: square;
+  }
+
+  article :global(ol li) {
+    margin-left: 2em;
+    list-style-type: decimal;
+  }
+
+  article :global(li li) {
+    margin-bottom: 0.2em;
+  }
+
+  article :global(li li:first-of-type) {
+    margin-top: 0.2em;
+  }
+
+  article :global(ul ul) {
+    margin-bottom: 0;
+  }
+
+  /* left bar in our blue at the same 18% strength */
+  article :global(blockquote) {
+    margin: 1em 0;
+    padding-left: 0.75em;
+    border-left: 0.75em solid rgb(107 145 181 / 0.18);
+  }
+
+  article :global(blockquote blockquote) {
+    border-left: none;
+    padding-left: 1.5em;
+  }
+
+  article :global(pre) {
+    margin: 1em 0;
+    padding: 0.5em;
+    border: 1px solid #3F6589;
+    border-radius: 6px;
+    line-height: 1.45;
+    white-space: pre-wrap;
+  }
+
+  article :global(:not(pre) > code) {
+    overflow-wrap: anywhere;
+  }
+
+  article :global(table) {
+    margin: 1em 0;
+    border-collapse: collapse;
+  }
+
+  article :global(th),
+  article :global(td) {
+    padding: 0.3em 0.5em 0.3em 0;
+    font-size: 0.9em;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  article :global(th) {
+    border-bottom: 1px solid #5580A8;
   }
 
   /* narrow: standard footnotes at the bottom, margin copies hidden */
@@ -59,7 +174,6 @@ const shown = post.data.date.toLocaleDateString("en-US", {
 
   article :global(.footnotes ol) {
     margin: 0;
-    padding-left: 22px;
   }
 
   article :global([data-footnote-ref]) {
