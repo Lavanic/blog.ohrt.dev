@@ -29,7 +29,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
   <body>
     <header class="bar">
       <div class="bar-inner">
-        <a href="/">blog.ohrt.dev</a>
+        <a href="/">Oliver Ohrt's Weblog</a>
         <span>
           <a href="/rss.xml" aria-label="RSS feed" title="RSS feed">
             <svg class="rss-icon" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
@@ -52,7 +52,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
               <path d="M184 213A140 140 0 0 0 44 73V38a175 175 0 0 1 175 175z" fill="#FFF"/>
             </svg>
           </a>
-          &middot; <a href="https://ohrt.dev">ohrt.dev</a>
+          &middot;
+          <a class="logo" href="https://ohrt.dev" aria-label="ohrt.dev">
+            <span class="logo-gear"></span>
+            <img src="/images/logo_static.png" width="59" height="18" alt="" draggable="false" />
+          </a>
         </span>
       </div>
     </header>
@@ -108,6 +112,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     text-decoration: none;
   }
 
+  .bar-inner > a {
+    position: relative;
+    top: 1px;
+  }
+
   .bar a:hover {
     text-decoration: underline;
   }
@@ -134,10 +143,43 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     font-size: 13px;
   }
 
+  .logo {
+    position: relative;
+    display: inline-block;
+    width: 77px;
+    height: 18px;
+    vertical-align: middle;
+  }
+
+  .logo-gear {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    background: url("/images/logo_gear.webp") 0 0 / 270px 18px;
+    animation: gear-spin 0.5s steps(15) infinite;
+  }
+
+  .logo img {
+    position: absolute;
+    left: 17.25px;
+    width: 59.25px;
+    height: 18px;
+    max-width: none;
+    -webkit-user-drag: none;
+  }
+
+  @keyframes gear-spin {
+    to { background-position: -270px 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .logo-gear { animation: none; }
+  }
+
   .rss-icon {
     width: 16px;
     height: 16px;
-    vertical-align: -3px;
+    vertical-align: -4px;
   }
 
   p { margin: 0; }
