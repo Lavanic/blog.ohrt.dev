@@ -1,34 +1,71 @@
 ---
 import BlogLayout from "../layouts/BlogLayout.astro";
-import { getPosts, postUrl } from "../lib/posts";
+import { formatDate, getPosts, postUrl } from "../lib/posts";
 
 const posts = await getPosts();
 ---
 
-<BlogLayout title="blog.ohrt.dev">
-  {posts.length === 0 ? (
-    <p>Nothing published yet.</p>
-  ) : (
-    <ul class="posts">
-      {posts.map((post) => (
-        <li>
-          <time datetime={post.data.date.toISOString()}>
-            {post.data.date.toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "short",
-              day: "numeric",
-              timeZone: "UTC",
-            })}
-          </time>
-          <a href={postUrl(post)}>{post.data.title}</a>
-          <p>{post.data.description}</p>
-        </li>
-      ))}
-    </ul>
-  )}
+<BlogLayout title="Oliver Ohrt’s Weblog">
+  <div class="home">
+    {posts.length === 0 ? (
+      <p>Nothing published yet.</p>
+    ) : (
+      <ul class="posts">
+        {posts.map((post) => (
+          <li>
+            <h2><a href={postUrl(post)}>{post.data.title}</a></h2>
+            <time datetime={post.data.date.toISOString()}>
+              {formatDate(post.data.date)}
+            </time>
+            <p>{post.data.description}</p>
+          </li>
+        ))}
+      </ul>
+    )}
+
+    <aside class="about">
+      <h3>About</h3>
+      <p>
+        I’m Oliver. I like to work on Computer Science / Engineering projects
+        and write about them sometimes. Find more about me at
+        <a href="https://ohrt.dev">ohrt.dev</a>.
+      </p>
+      <ul class="contact">
+        <li>Email: oliver@theohrts(dot)com</li>
+        <li>Feed: <a href="/rss.xml">RSS</a></li>
+      </ul>
+
+      <h3>Generative AI usage</h3>
+      <p>
+        All of the text on this weblog is written by me, without the assistance of
+        an LLM. I believe that sharing AI-written text masqueraded as 
+        human-authored is an insult to the reader. 
+      </p>
+      <p>
+        Generally, I utilize LLMs as a <strong>tool</strong> during software dev. But
+        none of the graphics/images in any of my posts are AI-generated. This is
+        on principle that they are extension of the text, and I would like them to be
+        just as carefully considered.
+      </p>
+    </aside>
+  </div>
 </BlogLayout>
 
 <style>
+  .home p {
+    margin: 0 0 0.8em 0;
+  }
+
+  .home a {
+    text-decoration: none;
+    border-bottom: 1px solid;
+  }
+
+  .home a:hover,
+  .home a:focus {
+    border-bottom-style: dotted;
+  }
+
   .posts {
     margin: 0;
     padding: 0;
@@ -36,16 +73,67 @@ const posts = await getPosts();
   }
 
   .posts li + li {
-    margin-top: 18px;
+    margin-top: 1.6em;
+  }
+
+  /* same title treatment as the post page */
+  .posts h2 {
+    margin: 0;
+    font-family: georgia, serif;
+    font-size: 1.4em;
+    line-height: 1.4;
+  }
+
+  .posts h2 a {
+    color: inherit;
+    border-bottom: none;
+  }
+
+  .posts h2 a:hover {
+    border-bottom: 1px dotted;
   }
 
   .posts time {
-    display: block;
-    margin: 0 0 2px;
+    margin: 0 0 0.4em;
   }
 
-  .posts p {
-    margin: 2px 0 0;
-    font-size: 15px;
+  /* narrow: the sidebar follows the post list */
+  .about {
+    margin-top: 2.5em;
+    padding-top: 1em;
+    border-top: 1px solid #5580A8;
+    font-size: 0.9em;
+  }
+
+  .about h3 {
+    margin: 1.2em 0 0.5em;
+    font-family: georgia, serif;
+    font-size: 1.2em;
+  }
+
+  .about h3:first-child {
+    margin-top: 0;
+  }
+
+  .contact {
+    margin: 0 0 0.8em;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* wide: two columns inside the header's width, so both edges line up */
+  @media (min-width: 45rem) {
+    .home {
+      display: grid;
+      grid-template-columns: 1fr 220px;
+      gap: 35px;
+      align-items: start;
+    }
+
+    .about {
+      margin: 0;
+      padding: 0;
+      border: none;
+    }
   }
 </style>
