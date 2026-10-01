@@ -31,6 +31,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       <div class="bar-inner">
         <a href="/">Oliver Ohrt's Weblog</a>
         <span>
+          <a class="logo" href="https://ohrt.dev" aria-label="ohrt.dev">
+            <span class="logo-gear"></span>
+            <img src="/images/logo_static.png" width="59" height="18" alt="" draggable="false" />
+          </a>
+          &middot;
           <a href="/rss.xml" aria-label="RSS feed" title="RSS feed">
             <svg class="rss-icon" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
               <defs>
@@ -51,11 +56,6 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
               <path d="M160 213h-34a82 82 0 0 0-82-82V97a116 116 0 0 1 116 116z" fill="#FFF"/>
               <path d="M184 213A140 140 0 0 0 44 73V38a175 175 0 0 1 175 175z" fill="#FFF"/>
             </svg>
-          </a>
-          &middot;
-          <a class="logo" href="https://ohrt.dev" aria-label="ohrt.dev">
-            <span class="logo-gear"></span>
-            <img src="/images/logo_static.png" width="59" height="18" alt="" draggable="false" />
           </a>
         </span>
       </div>
