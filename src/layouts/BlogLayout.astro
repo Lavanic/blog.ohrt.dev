@@ -71,7 +71,10 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 <style is:global>
   body {
     margin: 0;
-    background: #202E46;
+    background:
+      linear-gradient(rgb(32 46 70 / 0.98), rgb(32 46 70 / 0.98)),
+      url("/images/backdrop.jpg") center top / 100% auto repeat,
+      #202E46;
     color: #fff;
     font-family: "Helvetica Neue", helvetica, sans-serif;
     line-height: 1.45;
@@ -84,9 +87,12 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     padding: 0 38px;
   }
 
+  /* the centre column stays solid, full height, on every page */
   .wrapper {
     padding-top: 30px;
     padding-bottom: 18vh;
+    min-height: calc(100vh - 35px - 30px - 18vh);
+    background: #202E46;
   }
 
   .bar {
