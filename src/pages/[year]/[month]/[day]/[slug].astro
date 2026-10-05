@@ -257,13 +257,26 @@ const shown = formatDate(date);
       position: relative;
     }
 
+    /* margin items get their own solid panel, set 12px clear of the
+       centre column (which extends 38px past the text) */
+    .meta,
+    article :global(.sidenote) {
+      box-sizing: border-box;
+      width: 15rem;
+      padding: 10px 12px;
+      background: #202E46;
+    }
+
     /* pinned to the top of the right margin, same column as sidenotes */
     .meta {
       position: absolute;
       top: 0;
-      left: calc(100% + 35px);
-      width: 15rem;
+      left: calc(100% + 50px);
       margin: 0;
+    }
+
+    .meta > :last-child {
+      margin-bottom: 0;
     }
 
     article :global(.footnotes) {
@@ -275,8 +288,7 @@ const shown = formatDate(date);
       float: right;
       clear: right;
       position: relative;
-      width: 15rem;
-      margin: 4px calc(-15rem - 35px) 14px 0;
+      margin: 4px calc(-15rem - 50px) 14px 0;
       font-size: 14px;
       line-height: 1.45;
     }
@@ -284,7 +296,7 @@ const shown = formatDate(date);
     article :global(.sidenote-left) {
       float: left;
       clear: left;
-      margin: 4px 0 14px calc(-15rem - 35px);
+      margin: 4px 0 14px calc(-15rem - 50px);
     }
 
     article :global(.sidenote-num) {
