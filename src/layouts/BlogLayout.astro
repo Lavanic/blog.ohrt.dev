@@ -32,7 +32,10 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
         <a href="/">Oliver Ohrt's Weblog</a>
         <span>
           <a class="logo" href="https://ohrt.dev" aria-label="ohrt.dev">
-            <span class="logo-gear"></span>
+            <picture class="logo-gear">
+              <source srcset="/images/logo_gear_still.webp" media="(prefers-reduced-motion: reduce)" />
+              <img src="/images/logo_gear_spin.webp" width="16" height="16" alt="" draggable="false" />
+            </picture>
             <img src="/images/logo_static.png" width="59" height="18" alt="" draggable="false" />
           </a>
           &middot;
@@ -171,34 +174,31 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
   .logo {
     position: relative;
     display: inline-block;
-    width: 77px;
-    height: 18px;
+    width: 68px;
+    height: 16px;
     vertical-align: middle;
+    opacity: 0.75;
   }
 
   .logo-gear {
     position: absolute;
-    width: 18px;
-    height: 18px;
-    background: url("/images/logo_gear.webp") 0 0 / 270px 18px;
-    animation: gear-spin 0.5s steps(15) infinite;
+    width: 16px;
+    height: 16px;
   }
 
-  .logo img {
+  .logo-gear img {
+    display: block;
+    width: 16px;
+    height: 16px;
+  }
+
+  .logo > img {
     position: absolute;
-    left: 17.25px;
-    width: 59.25px;
-    height: 18px;
+    left: 15.33px;
+    width: 52.67px;
+    height: 16px;
     max-width: none;
     -webkit-user-drag: none;
-  }
-
-  @keyframes gear-spin {
-    to { background-position: -270px 0; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .logo-gear { animation: none; }
   }
 
   .rss-icon {
