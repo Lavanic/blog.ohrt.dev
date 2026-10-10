@@ -2,8 +2,8 @@
 title: Hello world
 date: 2026-09-16
 description: A placeholder while I build the blog.
-draft: true
-tags: [c, history, programming, wiki, hello, my, name, is]
+draft: false
+tags: [c, history, programming, wiki, syntax, C++]
 ---
 
 <!-- Placeholder text: adapted from Wikipedia's "Hello, world" article
