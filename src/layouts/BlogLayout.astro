@@ -95,6 +95,25 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     background: #202E46;
   }
 
+  @media (max-width: 47rem) {
+    body {
+      background:
+        linear-gradient(rgb(32 46 70 / 0.96), rgb(32 46 70 / 0.96)),
+        url("/images/backdrop.avif") center top / 736px auto repeat,
+        #202E46;
+    }
+
+    .wrapper {
+      margin: 0 16px;
+      padding-left: 12px;
+      padding-right: 12px;
+    }
+
+    .bar-inner {
+      padding: 0 28px;
+    }
+  }
+
   .bar {
     background: linear-gradient(
       to bottom,
