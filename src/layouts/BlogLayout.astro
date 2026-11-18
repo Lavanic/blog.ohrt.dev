@@ -3,9 +3,10 @@ interface Props {
   title: string;
   description?: string;
   published?: Date;
+  noindex?: boolean;
 }
 
-const { title, description = "Oliver Ohrt's blog.", published } = Astro.props;
+const { title, description = "Oliver Ohrt's blog.", published, noindex = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL("/images/og-card.jpg", Astro.site);
 
@@ -37,7 +38,7 @@ const about = published
     <meta name="darkreader-lock" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="alternate" type="application/rss+xml" title="blog.ohrt.dev" href="/rss.xml" />
